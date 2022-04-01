@@ -109,6 +109,21 @@ variable "cluster_ingress_allowed_cidrs" {
   type        = list(string)
   default     = []
 }
+variable "rancher_server_use_self_signed_certs" {
+  description = "Use self-signed certs"
+  type        = bool
+  default     = true
+}
+variable "k3s_deploy_traefik" {
+  default     = true
+  type        = bool
+  description = "Configures whether to deploy traefik ingress or not"
+}
+variable "install_nginx_ingress" {
+  default     = false
+  type        = bool
+  description = "Boolean that defines whether or not to install nginx-ingress"
+}
 variable "global_default_tags" {
   description = "Global default tags"
   default     = {}

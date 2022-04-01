@@ -28,19 +28,21 @@ resource "aws_security_group" "rancher_managed_cluster" {
 }
 
 # AWS EC2 instance for creating a single-node rancher managed (workload) cluster with k3s installed (non-HA)
-resource "aws_instance" "quickstart_node" {
+resource "aws_instance" "rancher_managed_cluster" {
   ami                    = data.aws_ami.sles.id
   instance_type          = var.ec2_instance_type
   key_name               = var.cluster_ssh_key_name
   vpc_security_group_ids = [aws_security_group.rancher_managed_cluster.id]
   subnet_id              = var.vpc_private_subnet_ids[0]
   user_data = templatefile(
-    join("/", [path.module, "files/userdata_quickstart_node.template"]),
+    join("/", [path.module, "files/userdata_rancher_managed_cluster.template"]),
     {
       docker_version     = var.docker_version
       username           = local.node_username
       kubernetes_version = var.kubernetes_version
-      register_command   = rancher2_cluster_v2.managed_cluster.cluster_registration_token.0.node_command
+      k3s_deploy_traefik = (var.k3s_deploy_traefik) ? "" : "--no-deploy traefik"
+      install_nginx_ingress = var.install_nginx_ingress
+      register_command   = (var.rancher_server_use_self_signed_certs) ? rancher2_cluster_v2.managed_cluster.cluster_registration_token.0.insecure_node_command : rancher2_cluster_v2.managed_cluster.cluster_registration_token.0.node_command
     }
   )
   provisioner "remote-exec" {

@@ -7,5 +7,5 @@ output "custom_cluster_windows_command" {
   description = "Docker command used to add a windows node to the quickstart cluster"
 }
 output "workload_node_ip" {
-  value = aws_instance.quickstart_node.private_ip
+  value = aws_instance.rancher_managed_cluster.private_ip
 }
