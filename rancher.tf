@@ -15,7 +15,7 @@ locals {
 //  provider = rancher2.admin
 //
 //  name        = var.cluster_name
-//  description = "Custom workload cluster created by Rancher quickstart"
+//  description = "Rancher workload cluster"
 //
 //  rke2_config {
 //    network {
@@ -28,10 +28,10 @@ locals {
 //}
 
 # Create a new rancher v2 K3S custom Cluster v2 (non-HA)
-resource "rancher2_cluster_v2" "managed_cluster" {
-  provider                                 = rancher2.admin
+resource "rancher2_cluster_v2" "managed-cluster" {
+  provider    = rancher2.admin
   name                                     = var.cluster_name
-  kubernetes_version                       = var.kubernetes_version
+    kubernetes_version = var.kubernetes_version
   enable_network_policy                    = false
   default_cluster_role_for_project_members = "user"
   # TODO : add support for multi-node (HA) RKE installation

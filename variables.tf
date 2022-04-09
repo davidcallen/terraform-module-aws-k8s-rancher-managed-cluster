@@ -59,6 +59,11 @@ variable "docker_version" {
   description = "Docker version to install on nodes"
   default     = "19.03"
 }
+variable "kubernetes_distribution" {
+  type        = string
+  description = "Kubernetes distribution (K3S, or RKE) "
+  default     = "RKE"
+}
 variable "kubernetes_version" {
   type        = string
   description = "Kubernetes version to use for managed workload cluster"
@@ -115,9 +120,9 @@ variable "rancher_server_use_self_signed_certs" {
   default     = true
 }
 variable "k3s_deploy_traefik" {
-  default     = true
-  type        = bool
   description = "Configures whether to deploy traefik ingress or not"
+  type        = bool
+  default     = true
 }
 variable "install_nginx_ingress" {
   default     = false

@@ -1,15 +1,15 @@
-resource "aws_instance" "rancher_managed_cluster_win" {
+resource "aws_instance" "rancher-managed-cluster-win" {
   count                  = var.add_windows_node ? 1 : 0
   ami                    = data.aws_ami.windows.id
   instance_type          = var.windows_ec2_instance_type
   subnet_id              = var.vpc_private_subnet_ids[0]
   key_name               = var.cluster_ssh_key_name
-  vpc_security_group_ids = [aws_security_group.rancher_managed_cluster.id]
+  vpc_security_group_ids = [aws_security_group.rancher-managed-cluster.id]
   get_password_data      = true
   user_data = templatefile(
-    join("/", [path.module, "files/userdata_rancher_managed_cluster_windows.template"]),
+    join("/", [path.module, "files/userdata_rancher-managed-cluster-windows.template"]),
     {
-      register_command = (var.rancher_server_use_self_signed_certs) ? rancher2_cluster_v2.managed_cluster.cluster_registration_token.0.insecure_windows_node_command : rancher2_cluster_v2.managed_cluster.cluster_registration_token.0.windows_node_command
+      register_command = (var.rancher_server_use_self_signed_certs) ? rancher2_cluster.managed-cluster.cluster_registration_token.0.insecure_windows_node_command : rancher2_cluster.managed-cluster.cluster_registration_token.0.windows_node_command
     }
   )
   root_block_device {
@@ -23,10 +23,10 @@ output "windows_password" {
   description = "Returns the decrypted AWS generated windows password"
   sensitive   = true
   value = [
-    for instance in aws_instance.rancher_managed_cluster_win :
+    for instance in aws_instance.rancher-managed-cluster-win :
     rsadecrypt(instance.password_data, data.tls_public_key.ssh-key.private_key_pem)
   ]
 }
 output "windows-workload-ips" {
-  value = aws_instance.rancher_managed_cluster_win[*].private_ip
+  value = aws_instance.rancher-managed-cluster-win[*].private_ip
 }

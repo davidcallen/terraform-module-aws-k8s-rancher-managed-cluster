@@ -4,7 +4,7 @@ Deploy the AWS resources for creating a kubernetes cluster for management by Ran
 
 Currently only supports a single-node k3s cluster.
 
-HA multi-node (RKE) cluster is on TODO list.  
+HA multi-node (RKE) cluster is on the TODO list.  
 
 Originally based off the [Rancher AWS Quickstart](https://github.com/rancher/quickstart/tree/master/aws). 
 
@@ -18,7 +18,7 @@ Example of usage of Rancher modules is below and is used [here](https://github.c
 locals {
   rancher_server_admin_password    = local.secrets_primary.data["rancher-server-admin.password"]
   rancher_server_hostname          = "rancher.${var.environment.name}.${module.global_variables.org_domain_name}"
-  rancher_managed_cluster_hostname = "kube.${var.environment.name}.${module.global_variables.org_domain_name}"
+  rancher-managed-cluster-hostname = "kube.${var.environment.name}.${module.global_variables.org_domain_name}"
 }
 module "k8s-rancher-server-infra" {
   count  = contains(var.prpl_deploy_modes, "RKE") ? 1 : 0
@@ -92,7 +92,7 @@ module "k8s-rancher-managed-cluster" {
   vpc_private_subnet_cidrs         = module.vpc.private_subnets_cidr_blocks
   route53_private_hosted_zone_id   = module.dns[0].route53_private_hosted_zone_id
   cluster_name                     = "kube"
-  cluster_dns                      = local.rancher_managed_cluster_hostname
+  cluster_dns                      = local.rancher-managed-cluster-hostname
   cluster_ssh_key_name             = aws_key_pair.ssh.key_name
   cluster_ssh_private_key_filename = "~/.ssh/prpl-aws/${var.environment.resource_name_prefix}-ssh-key"
   cluster_ingress_allowed_cidrs = concat(
